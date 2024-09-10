@@ -5,3 +5,4 @@ const envSchema = z.object({
 })
 
 export const env = envSchema.parse(process.env)
+// console.log('xt ', env.DATABASE_URL)
