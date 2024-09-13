@@ -4,8 +4,21 @@ import { Summary } from "./components/summary"
 import { EmptyGoals } from "./components/empty-goals"
 import { Dialog } from "./components/ui/dialog"
 
+type SummaryResponse = {
+  completed: number
+  total: number
+  goalsPerDay: Record<
+    string,
+    {
+      id: string
+      title: string
+      completedAt: string
+    }[]
+  >
+}
+
 export function App() {
-const [summary, setSummary] = useState(null)
+const [summary, setSummary] = useState<SummaryResponse | null>(null)
 
   useEffect(() => {
     fetch('http://localhost:3333/summary')
@@ -19,7 +32,8 @@ const [summary, setSummary] = useState(null)
 
   return ( 
     <Dialog>
-     {summary?.summary.total > 0 ? <Summary /> : <EmptyGoals />}
+      {/* <pre>{JSON.stringify(summary, null,2)}</pre> */}
+     {summary?.total && summary.total > 0 ? <Summary /> : <EmptyGoals />}
       <CreateGoal />
     </Dialog>
   )
