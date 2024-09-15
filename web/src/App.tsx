@@ -6,13 +6,14 @@ import { useQuery } from '@tanstack/react-query'
 import { getSummary } from './http/get-summary'
 
 export function App() {
+  
 
   const { data } = useQuery({
     queryKey: ['summary'],
     queryFn: getSummary,
     staleTime: 1000 * 60, // 60 seconds
   })
-
+  console.log(data?.total)
   return ( 
     <Dialog>
       {/* <pre>{JSON.stringify(summary, null,2)}</pre> */}

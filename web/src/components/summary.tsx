@@ -14,15 +14,20 @@ dayjs.locale(ptBR)
 
 export function Summary() {
 
-  const { data } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['summary'],
     queryFn: getSummary,
     staleTime: 1000 * 60, // 60 seconds
   })
 
-  if (!data) {
-    return null
+  if (isLoading) {
+    return <div>Carregando...</div>
   }
+
+  if (isError || !data) {
+    return <div>Ocorreu um erro ao carregar o resumo.</div>
+  }
+  
   const firstDayOfWeek = dayjs().startOf('week').format('D MMM')
   const lastDayOfWeek = dayjs().endOf('week').format('D MMM')
   const completedPercentage = Math.round((data.completed * 100) / data.total)
@@ -66,7 +71,8 @@ export function Summary() {
       <div className="flex flex-col gap-6">
         <h2 className="text-xl font-medium">Sua semana</h2>
 
-        {Object.entries(data.goalsPerDay).map(([date, goals]) => {
+        {Object.entries(data.goalsPerDay || {}).map(([date, goals]) => {
+        // {Object.entries(data.goalsPerDay).map(([date, goals]) => {
 
            const weekDay = dayjs(date).format('dddd')
            const formattedDate = dayjs(date).format('D[ de ]MMMM')
